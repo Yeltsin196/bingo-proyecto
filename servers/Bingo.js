@@ -6,7 +6,7 @@ class Bingo {
         this.Numbers = 90;
         this.Sorteados = Array();
         this.CardNums = 24;
-        this.IntervaloSorteio = 10000;
+        this.IntervaloSorteio = 6000;
     }
     NewCard() {
         const useds = Array();

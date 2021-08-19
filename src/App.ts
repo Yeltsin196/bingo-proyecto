@@ -32,11 +32,11 @@ class App {
 
         this.io.on('connection', (socket: any) => {
             if (this.debug) {
-                console.info('A user connected!');
+                console.log('A user connected!');
             }
 
             socket.on('NEW CONNECTION', (msg) => {
-
+                console.log("conexion nueva!");
                 socket.emit('NEW NUMBER POINTS', bingo.Numbers);
                 socket.emit('NUMBERS DRAW', bingo.Sorteados);
 
@@ -108,8 +108,13 @@ class App {
             do {
                 newNumber = bingo.GetNewNum() + 1;
             } while (bingo.Sorteados.indexOf(newNumber) !== -1);
-            bingo.Sorteados.push(newNumber);
-            io.emit('DRAW NUMBER', newNumber);
+            if (bingo.Gamers.length > 0) {
+
+                bingo.Sorteados.push(newNumber);
+                io.emit('DRAW NUMBER', newNumber);
+            }
+
+
         }, bingo.IntervaloSorteio, this.io);
 
         setInterval((io) => {
@@ -118,6 +123,7 @@ class App {
                 win_possible: bingo.PossibleGamersWinners(),
                 draw_numbers_counts: bingo.Sorteados.length,
             });
+
         }, 10000, this.io);
     }
 }

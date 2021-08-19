@@ -27,6 +27,7 @@ class App {
                 console.info('A user connected!');
             }
             socket.on('NEW CONNECTION', (msg) => {
+
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
                 socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
                 const card = Bingo_1.default.NewCard();
@@ -34,6 +35,7 @@ class App {
                 socket.selectedCards = Array();
                 socket.emit('NEW CARD', card);
                 Bingo_1.default.Gamers.push(socket);
+
             });
             socket.on('select number', (msg) => {
                 if (socket.card.indexOf(msg) > -1) {
@@ -91,8 +93,13 @@ class App {
             do {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
-            Bingo_1.default.Sorteados.push(newNumber);
-            io.emit('DRAW NUMBER', newNumber);
+            console.log(Bingo_1.default.Gamers.length);
+            if (Bingo_1.default.Gamers.length > 0) {
+
+                Bingo_1.default.Sorteados.push(newNumber);
+                io.emit('DRAW NUMBER', newNumber);
+            }
+
         }, Bingo_1.default.IntervaloSorteio, this.io);
         setInterval((io) => {
             io.emit('INFO', {
@@ -100,6 +107,7 @@ class App {
                 win_possible: Bingo_1.default.PossibleGamersWinners(),
                 draw_numbers_counts: Bingo_1.default.Sorteados.length,
             });
+
         }, 10000, this.io);
     }
 }
