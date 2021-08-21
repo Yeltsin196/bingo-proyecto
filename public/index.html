@@ -164,17 +164,17 @@
 	<div id="informacoes">
 		<table>
 			<tr>
-				<td align="right" width="50%">Jogadores:</td>
-				<td align="left" width="50%" id="jogadores" title="Quantidades de jogadores Online.">Carregando...</td>
+				<td align="right" width="50%">Jugadores:</td>
+				<td align="left" width="50%" id="jogadores" title="Cantidad de jugadores">Cargando...</td>
 			</tr>
 
-			<tr>
+			<!-- <tr>
 				<td align="right">Possiveis Ganhadores:</td>
 				<td align="left" id="pGanhadores" title="Jogadores que matematicamente j� ganharam.">Carregando...</td>
-			</tr>
+			</tr> -->
 			<tr>
-				<td align="right">Qtd. N. Sorteados:</td>
-				<td align="left" id="numeros_sorteados" title="Quantidade de numeros sorteados.">Carregando...</td>
+				<td align="right">Cant. N. Sorteados:</td>
+				<td align="left" id="numeros_sorteados" title="Numeros sorteados">Cargando...</td>
 			</tr>
 		</table>
 	</div>
@@ -336,6 +336,7 @@
 		socket.emit("button bingo");
 	}
 	function init_game() {
+		socket.emit('ADD CONNECTION');
 		socket.emit('NEW CONNECTION');
 	}
 </script>
@@ -404,7 +405,7 @@
 
 		socket.on('INFO', function (msg) {
 			document.querySelector("#jogadores").innerHTML = msg.gamers;
-			document.querySelector("#pGanhadores").innerHTML = msg.win_possible;
+			/* 	document.querySelector("#pGanhadores").innerHTML = msg.win_possible; */
 			document.querySelector("#numeros_sorteados").innerHTML = msg.draw_numbers_counts;
 			/* 	console.log(msg); */
 		});

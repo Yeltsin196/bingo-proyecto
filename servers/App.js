@@ -26,15 +26,23 @@ class App {
             if (this.debug) {
                 console.info('A user connected!');
             }
+            socket.on('ADD CONNECTION', (msg) => {
+                Bingo_1.default.NumberConections++;
+            })
             socket.on('NEW CONNECTION', (msg) => {
+                console.log(Bingo_1.default.NumberConections);
+                if (Bingo_1.default.NumberConections > 1) {
 
-                socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
-                socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
-                const card = Bingo_1.default.NewCard();
-                socket.card = card;
-                socket.selectedCards = Array();
-                socket.emit('NEW CARD', card);
-                Bingo_1.default.Gamers.push(socket);
+
+                    socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
+                    socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
+                    const card = Bingo_1.default.NewCard();
+                    socket.card = card;
+                    socket.selectedCards = Array();
+                    socket.emit('NEW CARD', card);
+                    Bingo_1.default.Gamers.push(socket);
+                    console.log("nueva!");
+                }
 
             });
             socket.on('select number', (msg) => {
@@ -93,7 +101,7 @@ class App {
             do {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
-            console.log(Bingo_1.default.Gamers.length);
+
             if (Bingo_1.default.Gamers.length > 0) {
 
                 Bingo_1.default.Sorteados.push(newNumber);

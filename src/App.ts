@@ -34,8 +34,13 @@ class App {
             if (this.debug) {
                 console.log('A user connected!');
             }
-
+            socket.on('ADD CONNECTION', (msg) => {
+                bingo.NumberConections++;
+            })
             socket.on('NEW CONNECTION', (msg) => {
+                console.log(bingo.NumberConections);
+
+
                 console.log("conexion nueva!");
                 socket.emit('NEW NUMBER POINTS', bingo.Numbers);
                 socket.emit('NUMBERS DRAW', bingo.Sorteados);
@@ -46,6 +51,8 @@ class App {
 
                 socket.emit('NEW CARD', card);
                 bingo.Gamers.push(socket);
+                console.log(bingo.Gamers);
+
 
             });
 
@@ -108,6 +115,7 @@ class App {
             do {
                 newNumber = bingo.GetNewNum() + 1;
             } while (bingo.Sorteados.indexOf(newNumber) !== -1);
+            console.log(bingo.Gamers.length);
             if (bingo.Gamers.length > 0) {
 
                 bingo.Sorteados.push(newNumber);

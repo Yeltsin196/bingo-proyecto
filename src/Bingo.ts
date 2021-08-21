@@ -5,6 +5,7 @@ class Bingo {
     public Sorteados = Array();
     public CardNums = 24;
     public IntervaloSorteio = 6000;
+    public NumberConections: number = 0;
 
     public NewCard() {
         const useds = Array();

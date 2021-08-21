@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Bingo {
     constructor() {
+        this.NumberConections = 0;
         this.Gamers = Array();
-        this.Numbers = 90;
+        this.Numbers = 75; // cantidad numeros del carton
         this.Sorteados = Array();
         this.CardNums = 24;
         this.IntervaloSorteio = 6000;
