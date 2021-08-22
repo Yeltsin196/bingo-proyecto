@@ -24,11 +24,12 @@ class App {
     listen() {
         this.io.on('connection', (socket) => {
             if (this.debug) {
-                console.info('A user connected!');
+                console.log('A user connected!');
             }
+
             socket.on('ADD CONNECTION', (msg) => {
                 Bingo_1.default.NumberConections++;
-            })
+            });
             socket.on('NEW CONNECTION', (msg) => {
 
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
@@ -44,8 +45,8 @@ class App {
 
 
                 Bingo_1.default.Gamers.push(socket);
-                console.log("nueva!");
 
+                console.log("nueva!");
 
             });
             socket.on('select number', (msg) => {
@@ -126,6 +127,7 @@ class App {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
 
+
             if (Bingo_1.default.Sorteados.length > Bingo_1.default.Numbers - 1) {
                 Bingo_1.default.Sorteados = [];
             }
@@ -135,6 +137,8 @@ class App {
                 io.emit('DRAW NUMBER', Bingo_1.default.Sorteados);
 
             }
+
+
 
         }, Bingo_1.default.IntervaloSorteio, this.io);
         setInterval((io) => {
