@@ -34,7 +34,7 @@ class App {
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
                 socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
                 const card = Bingo_1.default.NewCard();
-                console.log(card);
+
                 socket.card = card;
                 socket.selectedCards = Array();
                 socket.emit('NEW CARD', card);
