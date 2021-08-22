@@ -30,10 +30,11 @@ class App {
                 Bingo_1.default.NumberConections++;
             })
             socket.on('NEW CONNECTION', (msg) => {
-                console.log(Bingo_1.default.NumberConections);
+
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
                 socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
                 const card = Bingo_1.default.NewCard();
+                console.log(card);
                 socket.card = card;
                 socket.selectedCards = Array();
                 socket.emit('NEW CARD', card);
@@ -90,14 +91,14 @@ class App {
                 }
             });
             socket.on('disconnect', () => {
-                console.log(Bingo_1.default.Gamers);
+                console.log("desconection");
                 Bingo_1.default.Gamers.splice(Bingo_1.default.Gamers.indexOf(socket), 1);
                 if (this.debug) {
                     console.info('User disconnected!');
                 }
             });
             socket.on('reset', () => {
-                console.log(Bingo_1.default.NumberConections);
+
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
                 socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
                 const card = Bingo_1.default.NewCard();
@@ -115,10 +116,14 @@ class App {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
 
+            if (Bingo_1.default.Sorteados.length > Bingo_1.default.Numbers - 1) {
+                Bingo_1.default.Sorteados = [];
+            }
             if (Bingo_1.default.Gamers.length >= 2) {
 
                 Bingo_1.default.Sorteados.push(newNumber);
                 io.emit('DRAW NUMBER', Bingo_1.default.Sorteados);
+
             }
 
         }, Bingo_1.default.IntervaloSorteio, this.io);
@@ -129,7 +134,7 @@ class App {
                 draw_numbers_counts: Bingo_1.default.Sorteados.length,
             });
 
-        }, 10000, this.io);
+        }, 5000, this.io);
     }
 }
 exports.default = new App();

@@ -38,10 +38,7 @@ class App {
                 bingo.NumberConections++;
             })
             socket.on('NEW CONNECTION', (msg) => {
-                console.log(bingo.NumberConections);
 
-
-                console.log("conexion nueva!");
                 socket.emit('NEW NUMBER POINTS', bingo.Numbers);
                 socket.emit('NUMBERS DRAW', bingo.Sorteados);
 
@@ -51,7 +48,7 @@ class App {
 
                 socket.emit('NEW CARD', card);
                 bingo.Gamers.push(socket);
-                console.log(bingo.Gamers);
+
 
 
             });
@@ -101,16 +98,16 @@ class App {
             });
 
             socket.on('disconnect', () => {
+                console.log("desconection");
                 bingo.Gamers.splice(bingo.Gamers.indexOf(socket), 1);
                 if (this.debug) {
                     console.info('User disconnected!');
                 }
             });
             socket.on('reset', () => {
-                console.log(bingo.NumberConections);
 
 
-                console.log("conexion nueva!");
+
                 socket.emit('NEW NUMBER POINTS', bingo.Numbers);
                 socket.emit('NUMBERS DRAW', bingo.Sorteados);
 
@@ -120,7 +117,7 @@ class App {
 
                 socket.emit('NEW CARD', card);
                 bingo.Gamers.push(socket);
-                console.log(bingo.Gamers);
+
                 bingo.Sorteados = [];
 
             });
@@ -134,10 +131,14 @@ class App {
                 newNumber = bingo.GetNewNum() + 1;
             } while (bingo.Sorteados.indexOf(newNumber) !== -1);
 
+            if (bingo.Sorteados.length > bingo.Numbers - 1) {
+                bingo.Sorteados = [];
+            }
             if (bingo.Gamers.length >= 2) {
 
                 bingo.Sorteados.push(newNumber);
                 io.emit('DRAW NUMBER', bingo.Sorteados);
+
             }
 
 
@@ -151,6 +152,7 @@ class App {
             });
 
         }, 10000, this.io);
+
     }
 }
 

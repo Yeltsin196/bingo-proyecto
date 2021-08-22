@@ -215,23 +215,23 @@
 			<tr>
 				<td data-square="10">&nbsp;</td>
 				<td data-square="11">&nbsp;</td>
-				<td id="free">Free</td>
-				<td data-square="12">&nbsp;</td>
+				<td data-square="12" id="free">Free</td>
 				<td data-square="13">&nbsp;</td>
+				<td data-square="14">&nbsp;</td>
 			</tr>
 			<tr>
-				<td data-square="14">&nbsp;</td>
 				<td data-square="15">&nbsp;</td>
 				<td data-square="16">&nbsp;</td>
 				<td data-square="17">&nbsp;</td>
 				<td data-square="18">&nbsp;</td>
+				<td data-square="19">&nbsp;</td>
 			</tr>
 			<tr>
-				<td data-square="19">&nbsp;</td>
 				<td data-square="20">&nbsp;</td>
 				<td data-square="21">&nbsp;</td>
 				<td data-square="22">&nbsp;</td>
 				<td data-square="23">&nbsp;</td>
+				<td data-square="24">&nbsp;</td>
 			</tr>
 		</table>
 	</div>
@@ -332,17 +332,56 @@
 	var selectedSquares = new Array();
 
 	function newCard(card) {//precisa melhorarar pentende de atualizacao futura!
+
 		let colPlace = new Array(1, 2, 3, 4, 5);
-		for (var p = 0; p < colPlace.length; p++) {
-			for (var i = 0; i < card.length; i++) {
-				if (card[i] <= (colPlace[p] * (MaxPoints / 5))) {
-					let currentSquare = document.querySelector('td[data-square="' + i + '"]');
-					currentSquare.innerHTML = card[i];
-					currentSquare.addEventListener('click', selectSquare, false);
-					currentSquare.setAttribute("data-value", card[i]);
-				}
+
+
+		var arrayAux = [];
+		arrayAux[0] = card[0];
+		arrayAux[1] = card[5];
+		arrayAux[2] = card[10];
+		arrayAux[3] = card[15];
+		arrayAux[4] = card[20];
+
+		arrayAux[5] = card[1];
+		arrayAux[6] = card[6];
+		arrayAux[7] = card[11];
+		arrayAux[8] = card[16];
+		arrayAux[9] = card[21];
+
+		arrayAux[10] = card[2];
+		arrayAux[11] = card[7];
+		arrayAux[12] = card[12];
+		arrayAux[13] = card[17];
+		arrayAux[14] = card[22];
+
+		arrayAux[15] = card[3];
+		arrayAux[16] = card[8];
+		arrayAux[17] = card[13];
+		arrayAux[18] = card[18];
+		arrayAux[19] = card[23];
+
+		arrayAux[20] = card[4];
+		arrayAux[21] = card[9];
+		arrayAux[22] = card[14];
+		arrayAux[23] = card[19];
+		arrayAux[24] = card[24];
+
+		for (var i = 0; i < arrayAux.length; i++) {
+
+
+			if (i != 12) {
+				let currentSquare = document.querySelector('td[data-square="' + i + '"]');
+				currentSquare.innerHTML = arrayAux[i];
+				currentSquare.addEventListener('click', selectSquare, false);
+				currentSquare.setAttribute("data-value", arrayAux[i]);
 			}
+
+
+
+
 		}
+
 	}
 
 	function selectSquare(event) {
@@ -383,7 +422,7 @@
 		socket.on('connect', () => {
 
 			/* socket.emit('NEW CONNECTION'); */
-			console.log("hola!");
+			/* console.log("hola!"); */
 		});
 
 
@@ -399,13 +438,18 @@
 			SortearNumero(msg);
 
 			$("#roleta").empty();
-			msg.forEach(element => {
-				console.log(element);
-				var elemento = document.createElement("div");
-				elemento.setAttribute("data-value", element);
-				elemento.innerHTML = element;
-				document.getElementById("roleta").appendChild(elemento);
-			});
+			if (msg.length >= 75) {
+				socket.emit('reset');
+			} else {
+				msg.forEach(element => {
+
+					var elemento = document.createElement("div");
+					elemento.setAttribute("data-value", element);
+					elemento.innerHTML = element;
+					document.getElementById("roleta").appendChild(elemento);
+				});
+			}
+
 
 		});
 
@@ -418,16 +462,19 @@
 		});
 
 		socket.on('YOU WIN', function (msg) {
-			StopRoleta();
+			/* StopRoleta(); */
 
 			document.querySelector("#box #YW").style.display = 'block';
 			document.querySelector("#box").style.display = 'block';
-
+			setTimeout(() => {
+				socket.emit('reset');
+				console.log('recharge');
+			}, 4000);
 
 		});
 
 		socket.on('YOU LOST', function (msg) {
-			StopRoleta();
+			/* 	StopRoleta(); */
 
 			document.querySelector("#box #YL").style.display = 'block';
 			document.querySelector("#box").style.display = 'block';
@@ -436,7 +483,9 @@
 
 		socket.on('INFO', function (msg) {
 			document.querySelector("#jogadores").innerHTML = msg.gamers;
-			/* 	document.querySelector("#pGanhadores").innerHTML = msg.win_possible; */
+			if (msg.gamers == 0) {
+				$("#btn-start").prop('disabled', false);
+			}
 			document.querySelector("#numeros_sorteados").innerHTML = msg.draw_numbers_counts;
 			/* 	console.log(msg); */
 		});
@@ -450,7 +499,7 @@
 
 		socket.on('disconnect', () => {
 			/* 	StopRoleta(); */
-			console.log("Perdio conexion ");
+			console.log("Perdio conexion");
 		});
 	}
 </script>

@@ -6,7 +6,7 @@ class Bingo {
         this.Gamers = Array();
         this.Numbers = 75; // cantidad numeros del carton
         this.Sorteados = Array();
-        this.CardNums = 24;
+        this.CardNums = 25;
         this.IntervaloSorteio = 6000;
     }
     NewCard() {

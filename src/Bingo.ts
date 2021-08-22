@@ -1,9 +1,9 @@
 
 class Bingo {
     public Gamers = Array();
-    public Numbers = 90;
+    public Numbers = 75;
     public Sorteados = Array();
-    public CardNums = 24;
+    public CardNums = 25;
     public IntervaloSorteio = 6000;
     public NumberConections: number = 0;
 
