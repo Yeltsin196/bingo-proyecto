@@ -57,7 +57,17 @@ class App {
                 }
             });
             socket.on('button bingo', (msg) => {
-                if (socket.selectedCards.length >= Bingo_1.default.CardNums) {
+                /*  console.log(socket.card); */
+                var winVariable = Bingo_1.default.VerifyWin(socket.card);
+                console.log(winVariable);
+                if (winVariable) {
+                    socket.emit('YOU WIN');
+                } else {
+                    socket.emit('YOU LOST');
+                }
+                /* socket.emit('VerifyWin', Bingo_1.default.VerifyWin(socket.card)); */
+
+                /* if (socket.selectedCards.length >= Bingo_1.default.CardNums) {
                     let NumerosChekededs = 0;
                     Bingo_1.default.Sorteados.forEach((N) => {
                         socket.selectedCards.forEach(function (n) {
@@ -65,7 +75,7 @@ class App {
                                 NumerosChekededs++;
                             }
                             else {
-                                /*User lost*/
+                               
                                 socket.emit('YOU LOST');
                                 if (this.debug) {
                                     console.info('Trapaça! Numero não sorteado');
@@ -74,21 +84,21 @@ class App {
                         });
                     });
                     if (NumerosChekededs >= Bingo_1.default.CardNums) {
-                        /*User win Game*/
+                     
                         socket.emit('YOU WIN');
                         socket.broadcast.emit('you lost');
                         if (this.debug) {
-                            console.info('Alguém ganhou!');
+                            console.info('alguien gano!');
                         }
                     }
                 }
                 else {
-                    /*User lost*/
+                 
                     if (this.debug) {
                         console.info('Alguém Perdeu! A Cartela não foi toda preenchida!');
                     }
                     socket.emit('YOU LOST');
-                }
+                } */
             });
             socket.on('disconnect', () => {
                 console.log("desconection");
