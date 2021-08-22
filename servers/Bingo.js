@@ -6,7 +6,12 @@ class Bingo {
         this.Numbers = 90;
         this.Sorteados = Array();
         this.CardNums = 24;
+<<<<<<< Updated upstream
         this.IntervaloSorteio = 5000;
+=======
+        this.IntervaloSorteio = 6000;
+        this.NumberConections = 0;
+>>>>>>> Stashed changes
     }
     NewCard() {
         const useds = Array();

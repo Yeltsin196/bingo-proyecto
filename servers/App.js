@@ -24,9 +24,18 @@ class App {
     listen() {
         this.io.on('connection', (socket) => {
             if (this.debug) {
-                console.info('A user connected!');
+                console.log('A user connected!');
             }
+<<<<<<< Updated upstream
             socket.on('NEW CONNECTION', (msg) => {
+=======
+            socket.on('ADD CONNECTION', (msg) => {
+                Bingo_1.default.NumberConections++;
+            });
+            socket.on('NEW CONNECTION', (msg) => {
+                console.log(Bingo_1.default.NumberConections);
+                console.log("conexion nueva!");
+>>>>>>> Stashed changes
                 socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
                 socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
                 const card = Bingo_1.default.NewCard();
@@ -34,6 +43,10 @@ class App {
                 socket.selectedCards = Array();
                 socket.emit('NEW CARD', card);
                 Bingo_1.default.Gamers.push(socket);
+<<<<<<< Updated upstream
+=======
+                console.log(Bingo_1.default.Gamers);
+>>>>>>> Stashed changes
             });
             socket.on('select number', (msg) => {
                 if (socket.card.indexOf(msg) > -1) {
@@ -91,8 +104,16 @@ class App {
             do {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
+<<<<<<< Updated upstream
             Bingo_1.default.Sorteados.push(newNumber);
             io.emit('DRAW NUMBER', newNumber);
+=======
+            console.log(Bingo_1.default.Gamers.length);
+            if (Bingo_1.default.Gamers.length > 0) {
+                Bingo_1.default.Sorteados.push(newNumber);
+                io.emit('DRAW NUMBER', newNumber);
+            }
+>>>>>>> Stashed changes
         }, Bingo_1.default.IntervaloSorteio, this.io);
         setInterval((io) => {
             io.emit('INFO', {
