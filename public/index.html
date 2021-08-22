@@ -182,8 +182,11 @@
 		<div>
 			<button id="btn-bingo" onclick="sendBingo()">Bingo</button>
 		</div>
-		<div>
-			<button id="btn-bingo" onclick="init_game()">Start</button>
+		<div class="">
+			<button id="btn-start" class="btn btn-success mt-4" onclick="init_game()">Start</button>
+		</div>
+		<div class="">
+			<button id="btn-reset" class="btn btn-success mt-4">reset</button>
 		</div>
 	</div>
 	<div id="cartela">
@@ -243,8 +246,27 @@
 	integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
 	crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
+
+
 <script>
 	const socket = io();
+</script>
+<script>
+	$("#btn-start").on("click", function () {
+		$(this).prop('disabled', true);
+
+	})
+	$("#btn-reset").on("click", function () {
+		MaxPoints = 0;
+		ValueSorteado = 0;
+
+		IntervalValue = 10;
+
+		TimeInterval = 1000;
+		NumerosSorteados = [];
+		socket.emit('reset');
+		/* $("#roleta").empty(); */
+	})
 </script>
 <script>
 	/***Roleta ***/
@@ -297,6 +319,7 @@
 
 	function StopRoleta() {
 		clearInterval(IntervalBPoints);
+
 	}
 
 	function SortearNumero(num) {
@@ -374,12 +397,16 @@
 
 		socket.on('DRAW NUMBER', function (msg) {
 			SortearNumero(msg);
-			console.log(msg);
-			/* 	$("#roleta").html(msg); */
-			var elemento = document.createElement("div");
-			elemento.setAttribute("data-value", msg);
-			elemento.innerHTML = msg;
-			document.getElementById("roleta").appendChild(elemento);
+
+			$("#roleta").empty();
+			msg.forEach(element => {
+				console.log(element);
+				var elemento = document.createElement("div");
+				elemento.setAttribute("data-value", element);
+				elemento.innerHTML = element;
+				document.getElementById("roleta").appendChild(elemento);
+			});
+
 		});
 
 		socket.on('NEW CARD', function (msg) {
@@ -387,20 +414,24 @@
 			newCard(msg);
 
 			GirarRoleta();
-			/* 	document.querySelector("#box #WG").style.display = 'none';
-				document.querySelector("#box").style.display = 'none'; */
+
 		});
 
 		socket.on('YOU WIN', function (msg) {
 			StopRoleta();
+
 			document.querySelector("#box #YW").style.display = 'block';
 			document.querySelector("#box").style.display = 'block';
+
+
 		});
 
 		socket.on('YOU LOST', function (msg) {
 			StopRoleta();
+
 			document.querySelector("#box #YL").style.display = 'block';
 			document.querySelector("#box").style.display = 'block';
+
 		});
 
 		socket.on('INFO', function (msg) {
@@ -418,14 +449,18 @@
 		});
 
 		socket.on('disconnect', () => {
-			StopRoleta();
-			console.log("Conexao Fechada!! ");
+			/* 	StopRoleta(); */
+			console.log("Perdio conexion ");
 		});
 	}
 </script>
 <script>
 	listen();
 	InitAudio();
+</script>
+
+<script>
+
 </script>
 
 </html>

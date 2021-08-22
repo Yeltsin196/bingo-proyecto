@@ -40,5 +40,8 @@ class Bingo {
         });
         return winners;
     }
+    ResetBingo() {
+        this.Sorteados = [];
+    }
 }
 exports.default = new Bingo();

@@ -31,18 +31,20 @@ class App {
             })
             socket.on('NEW CONNECTION', (msg) => {
                 console.log(Bingo_1.default.NumberConections);
-                if (Bingo_1.default.NumberConections > 1) {
+                socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
+                socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
+                const card = Bingo_1.default.NewCard();
+                socket.card = card;
+                socket.selectedCards = Array();
+                socket.emit('NEW CARD', card);
 
 
-                    socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
-                    socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
-                    const card = Bingo_1.default.NewCard();
-                    socket.card = card;
-                    socket.selectedCards = Array();
-                    socket.emit('NEW CARD', card);
-                    Bingo_1.default.Gamers.push(socket);
-                    console.log("nueva!");
-                }
+
+
+
+                Bingo_1.default.Gamers.push(socket);
+                console.log("nueva!");
+
 
             });
             socket.on('select number', (msg) => {
@@ -88,10 +90,21 @@ class App {
                 }
             });
             socket.on('disconnect', () => {
+                console.log(Bingo_1.default.Gamers);
                 Bingo_1.default.Gamers.splice(Bingo_1.default.Gamers.indexOf(socket), 1);
                 if (this.debug) {
                     console.info('User disconnected!');
                 }
+            });
+            socket.on('reset', () => {
+                console.log(Bingo_1.default.NumberConections);
+                socket.emit('NEW NUMBER POINTS', Bingo_1.default.Numbers);
+                socket.emit('NUMBERS DRAW', Bingo_1.default.Sorteados);
+                const card = Bingo_1.default.NewCard();
+                socket.card = card;
+                socket.selectedCards = Array();
+                socket.emit('NEW CARD', card);
+                Bingo_1.default.Sorteados = [];
             });
         });
     }
@@ -102,10 +115,10 @@ class App {
                 newNumber = Bingo_1.default.GetNewNum() + 1;
             } while (Bingo_1.default.Sorteados.indexOf(newNumber) !== -1);
 
-            if (Bingo_1.default.Gamers.length > 0) {
+            if (Bingo_1.default.Gamers.length >= 2) {
 
                 Bingo_1.default.Sorteados.push(newNumber);
-                io.emit('DRAW NUMBER', newNumber);
+                io.emit('DRAW NUMBER', Bingo_1.default.Sorteados);
             }
 
         }, Bingo_1.default.IntervaloSorteio, this.io);

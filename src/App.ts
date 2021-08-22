@@ -106,6 +106,24 @@ class App {
                     console.info('User disconnected!');
                 }
             });
+            socket.on('reset', () => {
+                console.log(bingo.NumberConections);
+
+
+                console.log("conexion nueva!");
+                socket.emit('NEW NUMBER POINTS', bingo.Numbers);
+                socket.emit('NUMBERS DRAW', bingo.Sorteados);
+
+                const card = bingo.NewCard();
+                socket.card = card;
+                socket.selectedCards = Array();
+
+                socket.emit('NEW CARD', card);
+                bingo.Gamers.push(socket);
+                console.log(bingo.Gamers);
+                bingo.Sorteados = [];
+
+            });
         });
     }
     private runtime() {
@@ -115,11 +133,11 @@ class App {
             do {
                 newNumber = bingo.GetNewNum() + 1;
             } while (bingo.Sorteados.indexOf(newNumber) !== -1);
-            console.log(bingo.Gamers.length);
-            if (bingo.Gamers.length > 0) {
+
+            if (bingo.Gamers.length >= 2) {
 
                 bingo.Sorteados.push(newNumber);
-                io.emit('DRAW NUMBER', newNumber);
+                io.emit('DRAW NUMBER', bingo.Sorteados);
             }
 
 
